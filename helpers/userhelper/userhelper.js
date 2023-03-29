@@ -1,6 +1,7 @@
 const DB = require('../../models/connection')
 const bcrypt = require('bcrypt');
 const { name } = require('ejs');
+const { user } = require('../../models/connection');
 
 module.exports=
 {
@@ -38,5 +39,55 @@ module.exports=
                 
             }
         })
+    },
+
+    // login helper
+
+    doLogin:(data)=>
+    {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                let email = data.email
+                await DB.user.findOne({email:email}).then((user)=>
+                {
+                    console.log(user);
+                    let response = {}
+                    if(user)
+                    {
+                        console.log('iffffff');
+                        if(!user.status)
+                        {
+                            bcrypt.compare(data.password , user.Password).then((loginTrue)=>{
+                                if(loginTrue){
+                                    response.user = user
+                                    response.status = true
+                                    resolve(response)
+                                }
+                                else{
+                                    resolve({status:false})
+                                }
+
+                            })
+                        }
+                            else{
+                                resolve({blocked:true})
+                            }
+                        }
+                        else{
+                            console.log('elseeeee');
+                        
+                        resolve({status:true})
+                        }
+                    
+                
+                })
+                
+            } catch (error) {
+                throw error
+                
+            }
+        })
+
     }
 }

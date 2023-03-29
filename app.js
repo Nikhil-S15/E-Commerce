@@ -3,7 +3,11 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const expressLayouts=require('express-ejs-layouts')
+const expressLayouts = require('express-ejs-layouts')
+const session = require('express-session')
+const ConnectMongodbSession = require('connect-mongodb-session')
+const mongodbSession = new ConnectMongodbSession(session)
+
 
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
@@ -18,6 +22,23 @@ app.use(expressLayouts)
 
 app.use(logger('dev'));
 app.use(express.json());
+
+// session
+app.use(session({
+  saveUninitialized: false,
+  secret: 'sessionSecret',
+  resave: false,
+  store: new mongodbSession({
+    uri: "mongodb://localhost:27017/E-Commerce",
+    collection: "session"
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 24 * 10,//10 days
+  },
+}))
+
+
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

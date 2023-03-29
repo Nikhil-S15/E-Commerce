@@ -36,7 +36,17 @@
                                     <li><a href="#"><img src="assets/imgs/theme/flag-ru.png" alt="">Pусский</a></li>
                                 </ul>
                             </li>
-                            <li><i class="fi-rs-user"></i><a href="/login">Log In </a>
+                            <% if (user) { %>
+                                <!-- code to be executed if condition is true -->
+                                
+                                <li><i class="fi-rs-user"></i><a href="/logout"><%=user.username%>
+
+                            <% } else { %>
+                                <!-- code to be executed if condition is false -->
+                                <li><i class="fi-rs-user"></i><a href="/login">LogIn
+                            <% } %>
+                            
+                            </a>
                             </li>
                         </ul>
                     </div>
