@@ -31,9 +31,43 @@ status:{
     default : false,
 }
 
+    })
+
+ const adminSchema = new mongoose.Schema({
+    email:{
+        type : String
+    },
+    password:{
+        type : String
     }
-)
+})
+const productSchema = new mongoose.Schema({
+    name:{
+        type : String
+    },
+    brand:{
+        type : String
+    },
+    description:{
+        type : String
+    },
+    price:{
+        type : Number
+    },
+    quantity:{
+        type : Number
+    },
+    category:{
+        type : String
+    },
+    img:{
+        type : Array
+    }
+})
+
 
 module.exports = {
-    user: mongoose.model("user", userschema)
+    user: mongoose.model("user", userschema),
+    admin: mongoose.model("admin", adminSchema),
+    Product : mongoose.model('product',productSchema)
 }

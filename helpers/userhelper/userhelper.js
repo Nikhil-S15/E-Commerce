@@ -5,6 +5,7 @@ const { user } = require('../../models/connection');
 
 module.exports=
 {
+    // signup helper
     dosignUp:(data)=>
     {
         console.log(data);
