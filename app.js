@@ -7,6 +7,7 @@ const expressLayouts = require('express-ejs-layouts')
 const session = require('express-session')
 const ConnectMongodbSession = require('connect-mongodb-session')
 const mongodbSession = new ConnectMongodbSession(session)
+const multer = require ('multer')
 
 
 const userRouter = require('./routes/user');
@@ -20,7 +21,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(expressLayouts)
 
-// app.use(logger('dev'));
+app.use(logger('dev'));
 app.use(express.json());
 
 // session

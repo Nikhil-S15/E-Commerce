@@ -184,7 +184,7 @@
 
     function signup()
     {
-        console.log('asdfghjkl');
+        
         $.ajax({
             url:'/signup',
             method:'post',
@@ -193,7 +193,7 @@
             {
               if(updated)
               {
-                location.href='/login'
+                location.href='/'
               }
               else{
                 document.getElementById('errorEmail').innerText = 'Email already exist'

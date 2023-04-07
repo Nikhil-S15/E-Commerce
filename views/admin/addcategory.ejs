@@ -1,14 +1,84 @@
 
 
 
-<div class="text-center"><button type="button" class="btn btn-primary " data-toggle="modal" data-target="#exampleModal">
-    Add Category
-  </button></div>
 
 
 
+  <section class="content-main">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6 ">
+            <button type="button" class="btn btn-primary " id="add-category" data-toggle="modal" data-target="#exampleModal">
+              Add Category
+            </button></div>
+          
   
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <!-- category listing -->
+          <div class="col-lg-12 mt-60">
+            <div class="table-responsive" >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center">
+  
+            </div>
+            </th>
+            <th>No</th>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Sub Category</th>
+  
+            <% categories.forEach(function(item, index) { %>
+            <th class="text-end"></th>
+            </tr>
+            </thead>
+  
+            <tbody>
+              <tr>
+                <td class="text-center">
+  
+                </td>
+                <td><%= index + 1 %></td>
+                <td><%=  item._id%> </td>
+                <td><%=  item.category%></td>
+                <td><button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Sub Category
+                </button>
+                
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <% item.sub_category.forEach(function(item, index) { %>
+                  <a class="dropdown-item" href="#"><%=  item%></a>
+                   <% }) %>
+                </div>
+               
+                
+                </td> -->
+  
+  
+                <td class="text-end">
+                  <div>
+                    <a href="#" onclick="editCategory('<%= item._id %>')" id="showModal" class="btn btn-sm font-sm rounded btn-brand">
+                      <i class="material-icons md-edit"></i> Edit
+                    </a>
+                    <a id="deleteProduct" onclick="deleteCategory('<%= item._id %>')" class="btn btn-sm font-sm btn-danger rounded">
+                      <i class="material-icons md-delete_forever"></i> Delete
+                    </a>
+                  </div>
+          </div> <!-- dropdown //end -->
+          </td>
+          </tr>
+          </tbody>
+          <% }) %>
+          </table>
+        </div>
+      </div> <!-- .col// -->
+    </div> <!-- .row // -->
+    </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+  </section> <!-- content-main end// -->
+  
+  <div class="modal fade" id="category-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -18,14 +88,111 @@
           </button>
         </div>
         <div class="modal-body">
-            <label for="product_name" class="form-label">Name</label>
-            <input type="text" name="name" placeholder="Type here" class="form-control" id="name">
+            <label for="product_name" class="form-label">Category</label>
+            <input type="text" name="category" placeholder="Type here" class="form-control" id="category">
+            <p id="err1" class="text-danger"></p>
         </div>
+        <div class="modal-body">
+          <label for="product_name" class="form-label">Sub category</label>
+          <input type="text" name="subcategory" placeholder="Type here" class="form-control" id="subcategory">
+          <p id="err2" class="text-danger"></p>
+      </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-primary" id="submit-category">Save changes</button>
         </div>
       </div>
     </div>
   </div>
+
   
+  <script>
+    $('#add-category').click(function() {
+      $('#category-modal').modal('show');
+    });
+  
+    // Hide modal on close button or background click
+    $('.close, .modal').click(function() {
+      $('.modal').hide();
+    });
+    $(document).ready(function() {
+  
+  
+      // Prevent modal from closing on modal content click
+      $('.modal-content').click(function(e) {
+        e.stopPropagation();
+      });
+  
+  
+      $('#category-modal').on('shown.bs.modal', function() {
+        $('#submit-category').click(function() {
+          const category = $('#category').val().trim();
+          const error1 = $('#err1');
+          const subcategory = $('#subcategory').val().trim();
+          const error2 = $('#err2');
+          error1.text('');
+          error2.text('');
+
+  
+          if ((category == '') || (subcategory == '')) {
+            error1.text('Field is required');
+            error2.text('Field is required');
+
+          } else {
+            $.ajax({
+              url: '/admin/addcategory',
+              method: 'post',
+              data: {
+                category: category,
+                sub_category : subcategory
+              },
+              success(response) {
+                if (response.status) {
+                  swal({
+                    title: "Category Added Successfully",
+                    icon: "success",
+                    button: "OK",
+                  }).then(() => {
+                    location.reload();
+                  })
+  
+                  $('#category-modal').modal('hide');
+                } else {
+                  swal({
+                    title: "Already Exist",
+                    icon: "error",
+                    button: "OK",
+                  });
+                }
+              }
+            });
+          }
+        });
+      });
+    })
+  </script>
+  <style>
+    /* Position modal in the center of the screen */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      overflow: auto;
+    }
+  
+    /* Add overlay to the background */
+    .modal::before {
+      content: "";
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
+  </style>
