@@ -123,7 +123,7 @@ module.exports = {
             image.push(previousImages[3])
         }
 
-        adminHelpers.postEditProduct(proId, req.body, image).then(() => {
+        adminHelper.postEditProduct(proId, req.body, image).then(() => {
             res.redirect('/admin/productList')
         }) 
       
@@ -166,7 +166,10 @@ module.exports = {
 
   postEditCategory: (req, res) => {
     let data = req.body;
-    adminHelper.postEditCategory(data);
+    adminHelper.postEditCategory().then((response)=>
+    {
+      adminHelper.postEditCategory(data)
+    });
   },
 
   getLogout: (req, res) => {
@@ -174,4 +177,12 @@ module.exports = {
     req.session.admin = null;
     res.redirect("/admin");
   },
+
+  // delete category
+  deleteCategory: (req, res) => {
+    let catId = req.params.id
+    adminHelper.deleteCategory(catId).then((response) => {
+        res.send(response)
+    })
+},
 };

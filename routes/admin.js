@@ -54,7 +54,7 @@ router.get("/addcategory",auth.adminAuth, adminController.getAddCategory);
 router.post('/editcategory' , adminController.postEditCategory)
 
 // post delete category
-// router.post('/addcategory',adminController.postDeleteProduct)
+router.delete('/api/delete-category/:id',adminController.deleteCategory)
 
 router.get('/logout', adminController.getLogout)
 

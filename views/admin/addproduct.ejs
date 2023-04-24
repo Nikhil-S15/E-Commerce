@@ -46,10 +46,11 @@
                         <input name="quantity" id="quantity" type="number" min="1" max="100" required class="form-control">
                         <p id="error5" class="text-danger"></p>
                       </div>
-                    </div>
-                    <!-- <div class="col-lg-4">
+                    <!-- </div>
+                    <div class="col-lg-4">
                       <label class="form-label">Category</label>
                       <select class="form-select" name="category" id="category">
+                        
                       </select>
                       <p id="error6" class="text-danger"></p>
                     </div> -->
@@ -153,14 +154,14 @@
       const descriptionValue = description.value.trim()
       const priceValue = price.value.trim()
       const quantityValue = quantity.value.trim()
-      // const categoryValue = category.value.trim()
+      const categoryValue = category.value.trim()
   
       const error1 = name.parentElement.querySelector('p')
       const error2 = brand.parentElement.querySelector('p')
       const error3 = description.parentElement.querySelector('p')
       const error4 = price.parentElement.querySelector('p')
       const error5 = quantity.parentElement.querySelector('p')
-      // const error6 = category.parentElement.querySelector('p')
+      const error6 = category.parentElement.querySelector('p')
   
       error1.innerText = ''
       error2.innerText = ''
@@ -190,17 +191,17 @@
         error5.innerText = "Field is required"
         flag = 2
       }
-      // if (categoryValue == '') {
-      //   error6.innerText = "Field is required"
-      //   flag = 2
-      // }
+      if (categoryValue == '') {
+        error6.innerText = "Field is required"
+        flag = 2
+      }
   
       if (flag == 1) {
-        submit(nameValue,brandValue,descriptionValue,priceValue,quantityValue)
+        submit(nameValue,brandValue,descriptionValue,priceValue,quantityValue,categoryValue)
       }
     }
 
-    function submit(name,brand,description,price,quantity){
+    function submit(name,brand,description,price,quantity,category){
       console.log(name,brand,description,price,quantity,'.....................');
       $.ajax({
         url : '/admin/addproduct',
@@ -211,6 +212,7 @@
           description : description,
           price : price,
           quantity : quantity,
+          category : category
         },
         success(response){
           location.reload()

@@ -64,6 +64,11 @@ module.exports = {
     });
   },
 
+   /* GET LogOut Page. */
+   getLogout: (req, res) => {
+    req.session.user = null
+    res.redirect('/login')
+},
   // shop page
   getShop: () => {
    return new Promise(async (resolve, reject) => {
@@ -82,4 +87,5 @@ module.exports = {
       }
     });
   },
+  
 };

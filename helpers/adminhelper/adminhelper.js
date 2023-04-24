@@ -143,6 +143,44 @@ return new Promise((resolve, reject) => {
 })
 },
 
+ /* Post EditProduct Page. */
+ postEditProduct: (proId, product, image) => {
+console.log("hello");
+  
+      return new Promise(async(resolve,_reject) => {
+          await dbAdmin.Product.updateOne({ _id: proId },
+              {
+                  $set:
+                  {
+                      name: product.name,
+                      brand: product.brand,
+                      description: product.description,
+                      price: product.price,
+                      quantity: product.quantity,
+                      // category: product.category,
+                      img: image
+                  }
+              }).then((response) => {
+                  resolve(response)
+              })
+      })
+  
+},
+
+  //to get images for edit product
+  getPreviousImages: (proId) => {
+    try {
+        return new Promise(async (resolve, reject) => {
+            await dbAdmin.Product.findOne({ _id: proId }).then((response) => {
+                resolve(response.img)
+            })
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+
+},
+
 // delete product
 deleteProduct:(proId)=>
 {
@@ -184,7 +222,7 @@ postEditCategory: (data) => {
     console.log('like uor');
     return new Promise((resolve, reject) => {
       try {
-        dbAdmin.Product.find().then((product)=>
+        dbAdmin.Product.find().sort({_id:-1}).then((product)=>
         {
           if(product)
           {
@@ -195,9 +233,26 @@ postEditCategory: (data) => {
           }
         })
       } catch (error) {
-        throw error
+        throw console.log("error messeage");
       }
     })
-  }
+  },
+   /* Delete Category Page. */
+   deleteCategory: (catId) => {
+    try {
+        return new Promise((resolve, reject) => {
+        dbAdmin.Category.findByIdAndDelete(catId).then((res) => {
+                if (res) {
+                    resolve({ status: true })
+                } else {
+                    resolve({ status: false })
+                }
+            })
+        })
+
+    } catch (error) {
+        console.log(err.message);
+    }
+}
 
 };

@@ -64,6 +64,7 @@ module.exports = {
   
   },
 
+
   getLogout: (req, res) => {
     req.session.user = null;
     req.session.status = false;

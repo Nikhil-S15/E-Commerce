@@ -148,28 +148,28 @@
       const description = document.getElementById('description')
       const price = document.getElementById('price')
       const quantity = document.getElementById('quantity')
-      const category = document.getElementById('category')
+      // const category = document.getElementById('category')
   
       const nameValue = name.value.trim()
       const brandValue = brand.value.trim()
       const descriptionValue = description.value.trim()
       const priceValue = price.value.trim()
       const quantityValue = quantity.value.trim()
-      const categoryValue = category.value.trim()
+      // const categoryValue = category.value.trim()
   
       const error1 = name.parentElement.querySelector('p')
       const error2 = brand.parentElement.querySelector('p')
       const error3 = description.parentElement.querySelector('p')
       const error4 = price.parentElement.querySelector('p')
       const error5 = quantity.parentElement.querySelector('p')
-      const error6 = category.parentElement.querySelector('p')
+      // const error6 = category.parentElement.querySelector('p')
   
       error1.innerText = ''
       error2.innerText = ''
       error3.innerText = ''
       error4.innerText = ''
       error5.innerText = ''
-      error6.innerText = ''
+      // error6.innerText = ''
   
       let flag = 1
   
@@ -193,10 +193,10 @@
         error5.innerText = "Field is required"
         flag = 2
       }
-      if (categoryValue == '') {
-        error6.innerText = "Field is required"
-        flag = 2
-      }
+      // if (categoryValue == '') {
+      //   error6.innerText = "Field is required"
+      //   flag = 2
+      // }
   
       if (flag == 1) {
         document.getElementById('myForm').submit()

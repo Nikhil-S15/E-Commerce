@@ -46,7 +46,56 @@
   
   <script>
 
+function validate() {
+    const email = document.getElementById('email')
+    const password = document.getElementById('password')
 
+    const emailValue = email.value.trim()
+    const passwordValue = password.value.trim()
+
+    $.ajax({
+      url: '/login',
+      method: 'post',
+      data: {
+        email: emailValue,
+        password: passwordValue,
+      },
+      success(response) {
+        if (response.status) {
+          location.href = '/'
+        } else if(response.blocked){
+          document.getElementById('error').innerText = "You are blocked by admin"
+        } else {
+          document.getElementById('error').innerText = "Email or Password is incorrect"
+
+        }
+      
+      }
+    })
+  }
 
 
   </script>
+
+  <!--get otp login modal form-->
+<div class="modal fade" id="otp-login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div id="content-modal" class="modal-content">
+      <div id="verify-header" class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">OTP Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="otp-login-modal" class="modal-body">
+        <form >
+          <div class="mb-3">
+            <label for="Mobile Number" class="form-label">Mobile Number</label>
+            <input type="number" class="form-control" name="mobileNumber" id="mobileNumber" required>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary" id="send-otp" >Send OTP</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

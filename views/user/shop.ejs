@@ -42,7 +42,7 @@
                     <!-- <span class="old-price">$245.8</span> -->
                   </div>
                   <div class="product-action-1 show">
-                    <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a>
+                    <button aria-label="Add To Cart" class="action-btn hover-up" onclick="addtocart('<%= item._id%>')" ><i class="fi-rs-shopping-bag-add"></i></button>
                   </div>
                 </div>
               </div>
@@ -66,3 +66,17 @@
         </div>
       </div>
   </section>
+
+  <script>
+    function addtocart (proId) {
+      $.ajax({
+        url:'/add-to-cart/'+proId,
+        method:'GET',
+      
+        success:(r)=>{
+          console.log('donee');
+        }
+      })
+    }
+  </script>
+
