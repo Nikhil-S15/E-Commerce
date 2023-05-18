@@ -2,16 +2,20 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+
 const logger = require('morgan');
 const expressLayouts = require('express-ejs-layouts')
 const session = require('express-session')
 const ConnectMongodbSession = require('connect-mongodb-session')
 const mongodbSession = new ConnectMongodbSession(session)
+
 const multer = require ('multer')
 
 
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
+
+
 
 const dataBase = require('./models/connection')
 const app = express();

@@ -1,6 +1,7 @@
 const dbAdmin = require("../../models/connection");
 const bcrypt = require("bcrypt");
-const { name } = require("ejs");
+const categoryModel = require("../../models/connection")
+const { name, resolveInclude } = require("ejs");
 const { response } = require("express");
 
 module.exports = {
@@ -30,7 +31,7 @@ module.exports = {
   },
 
   // get user list
-  getUserList: () => {
+   getUserList: () => {
     return new Promise((resolve, reject) => {
       try {
         dbAdmin.user.find().then((user) => {
@@ -69,34 +70,39 @@ return new Promise((resolve, reject) => {
 
   // post add category
   postAddCategory: (data) => {
+    console.log(data, 'dataa');
     try {
-      return new Promise((resolve, reject) => {
-        dbAdmin.Category.findOne({ category: data.category }).then(
-          async (category) => {
-            if (!category) {
-              let category = dbAdmin.Category(data);
-              await category.save().then(() => {
-                resolve({ status: true });
-              });
-            } else {
-              if (!category.sub_category.includes(data.sub_category)) {
-                dbAdmin.Category.updateOne(
-                  { category: data.category },
-                  { $push: { sub_category: data.sub_category } }
-                ).then(() => {
-                  resolve({ status: true });
+        return new Promise((resolve, reject) => {
+            // capitalize the first letter of category
+            const category = data.category.charAt(0).toUpperCase() + data.category.slice(1).toLowerCase();
+
+            categoryModel.Category.findOne({ category: category })
+                .then(async (categoryDoc) => {
+                    if (!categoryDoc) {
+                        let newCategory = new categoryModel.Category({
+                            category: category,
+                            sub_category: [{ name: data.sub_category, offer: { validFrom: 0, validTo: 0, discountPercentage: 0 } }]
+                        });
+                        await newCategory.save().then(() => {
+                            resolve({ status: true });
+                        });
+                    } else {
+                        let subcategoryDoc = categoryDoc.sub_category.find((sub_category) => sub_category.name === data.sub_category);
+                        if (!subcategoryDoc) {
+                            categoryDoc.sub_category.push({ name: data.sub_category, offer: { validFrom: 0, validTo: 0, discountPercentage: 0 } });
+                            await categoryDoc.save().then(() => {
+                                resolve({ status: true });
+                            });
+                        } else {
+                            resolve({ status: false, message: 'Subcategory already exists.' });
+                        }
+                    }
                 });
-              } else {
-                resolve({ status: false });
-              }
-            }
-          }
-        );
-      });
+        });
     } catch (error) {
-      console.log(error.message);
+        console.log(error.message);
     }
-  },
+},
 
   /* GET editCategory Page. */
   getEditCategory: (catId) => {
@@ -113,8 +119,8 @@ return new Promise((resolve, reject) => {
     try {
       return new Promise((resolve, reject) => {
         let product = new dbAdmin.Product(data);
-        product.save().then(() => {
-          resolve();
+        product.save().then((response) => {
+          resolve(response);
         });
       });
     } catch (error) {
@@ -157,7 +163,7 @@ console.log("hello");
                       description: product.description,
                       price: product.price,
                       quantity: product.quantity,
-                      // category: product.category,
+                      category: product.category,
                       img: image
                   }
               }).then((response) => {
@@ -200,6 +206,20 @@ deleteProduct:(proId)=>
       throw error
     }
   })
+},
+
+deleteImage:(proId)=>
+{
+try {
+  return new Promise((resolve, reject) => {
+    dbAdmin.Product.findByIdAndDelete({_id:proId}).then((response)=>
+    {
+      
+    })
+  })
+} catch (error) {
+  console.log(error.message);
+}
 },
 
 // post edit product
@@ -253,6 +273,105 @@ postEditCategory: (data) => {
     } catch (error) {
         console.log(err.message);
     }
+},
+
+deleteSubCategory: (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    await dbAdmin.Category.updateOne(
+      { _id: id },
+      { $pull: { sub_category: { $in: [data] } } }
+    ).then((response) => {
+      console.log(response);
+      resolve(response);
+    })
+  });
+},
+getSubCategory:(data)=>
+{
+try {
+  return new Promise((resolve, reject) => {
+    dbAdmin.Category.findOne({category : data.category}).then((category)=>
+    {
+      if(category)
+      {
+        resolve(category.sub_category)
+      }
+      else{
+        reject("Category not found")
+      }
+    })
+  })
+} catch (error) {
+  console.log(error.message);
 }
+},
+getAllOrder:()=>
+{
+  try {
+    return new Promise(async (resolve, reject) => {
+     let Order = await dbAdmin.Order.aggregate([{$unwind:"$orders"},{$sort:{_id:-1}}]).then((response)=>
+  {
+    resolve(response)
+  })
+    })
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+// // get sales report
+
+getSalesReport: () => {
+  try {
+      return new Promise((resolve, reject) => {
+          dbAdmin.Order.aggregate([
+              {
+                  $unwind: '$orders'
+              },
+              {
+                  $match: {
+                      "orders.orderConfirm": "delivered"
+                  }
+              }
+          ]).then((response) => {
+              resolve(response)
+          })
+      })
+  } catch (error) {
+      console.log(error.message);
+  }
+},
+
+postReport: (date) => {
+  console.log(date, 'date+++++');
+  try {
+      let start = new Date(date.startdate);
+      let end = new Date(date.enddate);
+      return new Promise((resolve, reject) => {
+        dbAdmin.Order.aggregate([
+          {
+            $unwind: "$orders"
+          },
+          {
+            $match: {
+              "orders.orderConfirm": "delivered",
+              "orders.createdAt": {
+                $gte: start,
+                $lte: end
+              }
+            }
+          }
+        ])
+        .exec()
+              .then((response) => {
+                  console.log(response, 'response---');
+                  resolve(response)
+              })
+      })
+  } catch (error) {
+      console.log(error.message);
+  }
+},
+
 
 };

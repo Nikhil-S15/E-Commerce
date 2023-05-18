@@ -10,7 +10,7 @@
   </div>
   <div class="card mb-4">
     <div class="card-body">
-      <table class="table table-bordered">
+      <table class="table table-bordered"  id="productsTable">
         <thead>
           <tr>
             <th>
@@ -78,34 +78,44 @@
 
 </section> <!-- content-main end// -->
 
+
+<script>
+    $(document).ready( function () {
+      $('#productsTable').DataTable();
+  } );
+</script>
+
+
 <script>
   function deleteProduct(proId){
-    swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover this category!",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          $.ajax({
-            url: '/admin/deleteProduct/' + proId,
-            method: 'delete',
-            success(response) {
-              if(response.status){
-                swal("Category has been deleted!", {
-                  icon: "success",
-                });
-              }else{
-                swal("Oops!", "Something went wrong. Category not deleted!", "error");
-              }
-            }
-          })
-        }else{
-          swal("Category is safe!");
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this category!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      $.ajax({
+        url: '/admin/deleteProduct/' + proId,
+        method: 'delete',
+        success(response) {
+          if(response.status){
+            swal("Category has been deleted!", {
+              icon: "success"
+            }).then(() => {
+              location.reload();
+            });
+          }else{
+            swal("Oops!", "Something went wrong. Category not deleted!", "error");
+          }
         }
       })
+    }else{
+      swal("Category is safe!");
+    }
+  })
+}
 
-  }
 </script>

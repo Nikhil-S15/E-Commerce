@@ -1,34 +1,36 @@
+const DB_URL= process.env.DB_URL
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-mongoose
-  .connect("mongodb://localhost:27017/E-Commerce")
+mongoose.connect("mongodb://localhost:27017/E-Commerce")
   .then(() => console.log("DataBase Connected Successfully"))
   .catch((err) => console.log(err.message));
 
 const userschema = new mongoose.Schema({
+ 
   username: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  Password: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  phonenumber: {
+    type: String
+},
+email: {
+    type: String
+},
+phonenumber: {
+    type: Number
+},
+Password: {
+    type: String
+},
+wallet: {
     type: Number,
-    required: true,
-    unique: true,
-  },
-  status: {
+    default: 0
+},
+createdAt: {
+    type: Date,
+    default: new Date()
+},
+status: {
     type: Boolean,
-    default: true,
-  },
+    default: true
+}
 });
 
 const adminSchema = new mongoose.Schema({
@@ -58,6 +60,13 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
   },
+  sub_category: {
+    type: String
+},
+discountedPrice: {
+  type: Number,
+  default: 0
+},
   img: {
     type: Array,
   },
@@ -70,6 +79,11 @@ const categorySchema = new mongoose.Schema({
   sub_category: {
     type: Array,
   },
+  offer: {
+    discount: { type: Number, default: 0 },
+    validFrom: { type: Date, default: undefined },
+    validTo: { type: Date, default: undefined }
+}
 });
 const cartSchema = new mongoose.Schema({
 
@@ -141,6 +155,70 @@ const addressSchema = new mongoose.Schema({
 
 })
 
+const bannerSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+
+  created_at: {
+    type: Date,
+    default: Date.now,
+  },
+  updated_at: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const wishListSchema = new mongoose.Schema({
+  user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user'
+  },
+  wishList: [
+      {
+          productId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'product'
+          },
+
+          createdAt: {
+              type: Date,
+              default: Date.now
+          }
+      }
+  ]
+})
+
+const couponSchema = new mongoose.Schema({
+  couponCode: {
+      type: String
+  },
+  validity: {
+      type: Date,
+      default: new Date
+  },
+  minPurchase: { type: Number },
+  minDiscountPercentage: { type: Number },
+  maxDiscountValue: { type: Number },
+  description: { type: String },
+  createdAt: {
+      type: Date,
+      default: new Date
+  }
+
+})
+
+
 module.exports = {
   user: mongoose.model("user", userschema),
   admin: mongoose.model("admin", adminSchema),
@@ -149,4 +227,7 @@ module.exports = {
   Cart : mongoose.model('cart',cartSchema),
   Address :mongoose.model('address',addressSchema),
   Order : mongoose.model('order',orderSchema),
+  banner: mongoose.model("Banner", bannerSchema),
+  Wishlist: mongoose.model('wishlist', wishListSchema),
+  Coupon : mongoose.model('coupon', couponSchema)
 };
