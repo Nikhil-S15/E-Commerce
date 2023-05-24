@@ -5,6 +5,7 @@ const cartModel = require("../../models/connection");
 const addressModel = require("../../models/connection");
 const orderModel = require("../../models/connection");
 const userModel = require("../../models/connection")
+const productModel = require ("../../models/connection")
 const { log } = require("console");
 
 
@@ -301,17 +302,17 @@ module.exports = {
 
                 //inventory management 
                 // update product quantity in the database
-                // for (let i = 0; i < productDetails.length; i++) {
-                //     let purchasedProduct = productDetails[i];
-                //     let originalProduct = await productModel.Product.findById(purchasedProduct.productId);
-                //     let purchasedQuantity = purchasedProduct.quantity;
-                //     originalProduct.quantity -= purchasedQuantity;
-                //     await originalProduct.save();
-                //     await cartModel.Cart.deleteMany({ user: data.user }).then(() => {
-                //         resolve()
-                //     })
+                for (let i = 0; i < productDetails.length; i++) {
+                    let purchasedProduct = productDetails[i];
+                    let originalProduct = await productModel.Product.findById(purchasedProduct.productId);
+                    let purchasedQuantity = purchasedProduct.quantity;
+                    originalProduct.quantity -= purchasedQuantity;
+                    await originalProduct.save();
+                    await cartModel.Cart.deleteMany({ user: data.user }).then(() => {
+                        resolve()
+                    })
 
-                // }
+                }
 
             }
 
@@ -686,37 +687,9 @@ cancelOrder: (orderId) => {
                 );
                 let order = orders[0].orders.find((order) => order._id == orderId);
 
-                if (order.paymentMethod === 'razorpay' && order.paymentStatus === 'Paid') {
+                // if (order.paymentMethod === 'razorpay' && order.paymentStatus === 'Paid') {
                     // Fetch payment details from Razorpay API
-                    instance.payments.fetch(order.paymentId).then((payment) => {
-                        if (payment.status === 'captured') {
-                            // Initiate refund using the payment ID and refund amount
-                            instance.payments.refund(order.paymentId, { amount: order.totalPrice * 100 }).then((refund) => {
-                                // Update order status in the database
-                                orderModel.Order.updateOne(
-                                    { 'orders._id': orderId },
-                                    {
-                                        $set: {
-                                            ['orders.' + orderIndex + '.orderConfirm']: 'Returned',
-                                            ['orders.' + orderIndex + '.paymentStatus']: 'Refunded'
-                                        }
-                                    }
-                                ).then((orders) => {
-                                    resolve(orders);
-                                });
-                            }).catch((error) => {
-                                console.log(error);
-                                reject(error);
-                            });
-                        } else {
-                            console.log('Payment not captured');
-                            reject('Payment not captured');
-                        }
-                    }).catch((error) => {
-                        console.log(error);
-                        reject(error);
-                    });
-                } else if (order.paymentMethod === 'COD' || order.paymentMethod === 'wallet') {
+                  if (order.paymentMethod === 'COD' || order.paymentMethod === 'wallet' || order.paymentMethod === 'razorpay') {
                     // Update order status in the database
                     orderModel.Order.updateOne(
                         { 'orders._id': orderId },
@@ -918,7 +891,21 @@ addWallet: (userId, total) => {
         } catch (error) {
             console.log(error.message);
         }
-    }
+    },
+
+    getCouponList:()=>
+    {
+        try {
+            return new Promise((resolve, reject) => {
+          cartModel.Coupon.find().then((coupon)=>
+              {
+                resolve(coupon)
+              })  
+            })
+        } catch (error) {
+          console.log(error.mesage);  
+        }
+    },
 
 
 };

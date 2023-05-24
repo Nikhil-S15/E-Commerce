@@ -41,18 +41,15 @@
                   </div> -->
                 </div>
                 <div class="product-content-wrap">
-                  <!-- <div class="product-category">
-                    <a href="shop-grid-right.html">Music</a>
-                  </div> -->
                   <h2><a href="#"><%= item.name %></a></h2>
-                  <div class="rating-result" title="90%">
-                    <!-- <span>
-                      <span>90%</span>
-                    </span> -->
-                  </div>
+                  <div class="rating-result" title="90%"></div>
                   <div class="product-price">
-                    <span>₹<%= item.price %> </span>
-                    <!-- <span class="old-price">$245.8</span> -->
+                    <% if (item.discountedPrice > 0) { %>
+                    <span class="discounted-price">₹<%= item.discountedPrice %></span>
+                    <small class="text-muted" style="text-decoration: line-through; margin-left: 10px;">₹<%= item.price %></small>
+                    <% } else { %>
+                    <span>₹<%= item.price %></span>
+                    <% } %>
                   </div>
                   <div class="product-action-1 show">
                     <button aria-label="Add To Cart" class="action-btn hover-up" onclick="addtocart('<%= item._id%>')" ><i class="fi-rs-shopping-bag-add"></i></button>
@@ -84,7 +81,7 @@
     function addtocart (proId) {
       $.ajax({
         url:'/add-to-cart/'+proId,
-        method:'GET',
+        method:'POST',
       
         success:(response)=>{
           Swal.fire({
@@ -93,6 +90,19 @@
             icon: 'success',
             timer: 5000
           })
+          if (response.error) {
+            console.log(response.error,"ooollll");
+          Swal.fire({
+            
+            icon: 'warning',
+            title: response.message,
+            showConfirmButton: false,
+            timer: 3000
+          }).then(() => {
+            location.reload()
+
+          })
+        }
         }
       })
     }

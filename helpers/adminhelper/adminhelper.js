@@ -275,11 +275,11 @@ postEditCategory: (data) => {
     }
 },
 
-deleteSubCategory: (id, data) => {
+deleteSubCategory: (id, name) => {
   return new Promise(async (resolve, reject) => {
     await dbAdmin.Category.updateOne(
       { _id: id },
-      { $pull: { sub_category: { $in: [data] } } }
+      { $pull: { sub_category: {  name: name } } }
     ).then((response) => {
       console.log(response);
       resolve(response);
@@ -354,12 +354,11 @@ postReport: (date) => {
           },
           {
             $match: {
-              "orders.orderConfirm": "delivered",
-              "orders.createdAt": {
-                $gte: start,
-                $lte: end
-              }
-            }
+              $and: [
+                  { "orders.orderConfirm": "delivered" },
+                  { "orders.createdAt": { $gte: start, $lte: new Date(end.getTime() + 86400000) } }
+              ]
+          }
           }
         ])
         .exec()

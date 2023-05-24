@@ -1,176 +1,80 @@
-<section class="content-main">
-    <div class="content-header">
-      <div>
-        <h2 class="content-title card-title">Orders </h2>
-      </div>
-      <div>
-        <input type="text" placeholder="Search order ID" class="form-control bg-white">
-      </div>
+<section class="product-tabs section-padding wow fadeIn animated">
+  <div class="container">
+    <div class="tab-header">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one"
+            type="button" role="tab" aria-controls="tab-one" aria-selected="true">
+            Featured
+          </button>
+        </li>
+
+      </ul>
+      <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
     </div>
-    <div class="card mb-4">
-      
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Total</th>
-                <th scope="col">Payment Status</th>
-                <th scope="col">Order Status</th>
-                <th scope="col">Date</th>
-                <th scope="col" class="text-end"> Action </th>
-              </tr>
-            </thead>
-         
-              <% order?.orders.forEach(function(order,index) { %>
-  
-              
-  
-            <tbody>
-              <tr>
-                <td><%=index + 1%></td>
-                <td><%=order.shippingAddress[0].item.fname%></td>
-                <td><template class="_cf_email_" data-cfemail="244041564d414a4164415c45495448410a474b49">[email&#160;protected]</template><%=order.shippingAddress[0].item.email%></td>
-                <td>₹ <%=order.totalPrice%></td>
-  
-                <td>
-                  <% if(order.paymentStatus === 'paid') { %>
-                  <span class="badge rounded-pill alert-success"><%=order.paymentStatus%></span>
-                  <% } else { %> 
-                  <span class="badge rounded-pill alert-danger"><%=order.paymentStatus%></span>
-                  <% } %>
-              </td>
-              
-                <td>
-                  <% if(order.orderConfirm === 'canceled') { %>
-                  <span class="badge rounded-pill alert-danger"><%=order.orderConfirm%></span>
-                  <% } else { %>
-                  <span class="badge rounded-pill alert-success"><%=order.orderConfirm%></span>
-                  <% } %>
-   
-              </td>
-                <td><%= new Date(order.createdAt).toDateString()%></td>
-                <td class="text-end">
-                  <a href="/admin/order-details/?orderId=<%= order._id %>&userId=<%= userId%>" class="btn btn-md rounded font-sm">Detail</a>
-  
-                </td>
-              </tr>
-            </tbody>
-  
+    <!--End nav-tabs-->
+    <div class="tab-content wow fadeIn animated" id="myTabContent">
+      <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+        <div class="row product-grid-4">
+
+          <% newlyAdded.forEach(function(product) { %>
+
+            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+              <div class="product-cart-wrap mb-30">
+                <div class="product-img-action-wrap">
+                  <div class="product-img product-img-zoom">
+                    <a href="/shop-product/<%=product._id%>">
+                      <img class="default-img" src="/uploads/<%=product.img[0]%>" alt="" />
+                      <img class="hover-img" src="/uploads/<%=product.img[0]%>" alt="" />
+                    </a>
+                  </div>
+                  <div class="product-action-1">
+
+                    <!-- <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i
+                      class="fi-rs-heart"></i></a> -->
+
+                  </div>
+                  <div class="product-badges product-badges-position product-badges-mrg">
+                    <span class="hot">Hot</span>
+                  </div>
+                </div>
+                <div class="product-content-wrap">
+                  <div class="product-category">
+                    <a href="#">
+                      <%=product.category%>
+                    </a>
+                  </div>
+                  <h2>
+                    <a href="/shop-product/<%=product._id%>">
+                      <%=product.name%>
+                    </a>
+                  </h2>
+                  <div class="rating-result" title="90%">
+                    <span>
+                      <span>90%</span>
+                    </span>
+                  </div>
+                  <div class="product-price">
+                      <ins><span class="text-brand">₹<%= product.price %></span></ins>
+                    <!-- <span class="old-price">$245.8</span> -->
+                  </div>
+                  <!-- <div class="product-action-1 show">
+                  <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i
+                      class="fi-rs-shopping-bag-add"></i></a>
+                </div> -->
+                </div>
+              </div>
+            </div>
+
             <% }); %>
-  
-          </table>
-        </div> <!-- table-responsive //end -->
-      </div> <!-- card-body end// -->
-    </div> <!-- card end// -->
-    <div class="pagination-area mt-15 mb-50">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-start">
-          <li class="page-item active"><a class="page-link" href="#">01</a></li>
-          <li class="page-item"><a class="page-link" href="#">02</a></li>
-          <li class="page-item"><a class="page-link" href="#">03</a></li>
-          <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-          <li class="page-item"><a class="page-link" href="#">16</a></li>
-          <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-        </ul>
-      </nav>
-    </div>
-  </section> <!-- content-main end// -->,
-  <section class="content-main">
-    <div class="content-header">
-      <div>
-        <h2 class="content-title card-title">Orders </h2>
+
+
+
+        </div>
+        <!--End product-grid-4-->
       </div>
-      <div>
-        <input type="text" placeholder="Search order ID" class="form-control bg-white">
-      </div>
+
     </div>
-    <div class="card mb-4">
-      
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Total</th>
-                <th scope="col">Payment Status</th>
-                <th scope="col">Order Status</th>
-                <th scope="col">Date</th>
-                <th scope="col" class="text-end"> Action </th>
-              </tr>
-            </thead>
-         
-              <% orders?.forEach(function(order,index) { %>
-  
-            <tbody>
-              <tr>
-                <td><%=index + 1%></td>
-                <td><template class="__cf_email__" data-cfemail="244041564d414a4164415c45495448410a474b49">[email&#160;protected]</template><%=order.shippingAddress[0].item.email%></td>
-                <td>₹ <%=order.totalPrice%></td>
-  
-                <td>
-                  <% if(order.paymentStatus === 'paid') { %>
-                  <span class="badge rounded-pill alert-success"><%=order.paymentStatus%></span>
-                  <% } else { %> 
-                  <span class="badge rounded-pill alert-danger"><%=order.paymentStatus%></span>
-                  <% } %>
-              </td>
-              
-                <td>
-                  <% if(order.orderConfirm === 'canceled') { %>
-                  <span class="badge rounded-pill alert-danger"><%=order.orderConfirm%></span>
-                  <% } else { %>
-                  <span class="badge rounded-pill alert-success"><%=order.orderConfirm%></span>
-                  <% } %>
-   
-              </td>
-                <td><%= new Date(order.createdAt).toDateString()%></td>
-                <td class="text-end">
-                  <a href="admin/order-details/?orderId=<%= response._id %>&userId=<%= response.user%>" class="btn btn-md rounded font-sm">Detail</a>
-                  <button class="btn btn-info" onclick="orderList('<%= response._id %>','<%= response.user%>')">dee</button>
-  
-                </td> 
-              </tr>
-            </tbody>
-  
-            <% }); %>
-  
-          </table>
-        </div> <!-- table-responsive //end -->
-      </div> <!-- card-body end// -->
-    </div> <!-- card end// -->
-    <div class="pagination-area mt-15 mb-50">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-start">
-          <li class="page-item active"><a class="page-link" href="#">01</a></li>
-          <li class="page-item"><a class="page-link" href="#">02</a></li>
-          <li class="page-item"><a class="page-link" href="#">03</a></li>
-          <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-          <li class="page-item"><a class="page-link" href="#">16</a></li>
-          <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-        </ul>
-      </nav>
-    </div>
-  </section> <!-- content-main end// -->
-  
-  <script>
-    function orderList(orderId, userId){
-      console.log('jdhksjdh');
-      $.ajax({
-        url:'admin/order-details',
-        data:{
-          orderId,
-          userId
-        },
-        method: 'get',
-        
-      })
-    }
-  </script>
- 
+    <!--End tab-content-->
+  </div>
+</section>

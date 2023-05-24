@@ -5,6 +5,7 @@ const cartController = require("../controllers/cart-controller/cartcontroller");
 const ordercontroller = require("../controllers/cart-controller/ordercontroller");
  const wishControllers = require("../controllers/user-controller/whishlistcontroller")
 const auth = require("../middleware/auth")
+const {checkProductQty,checkProductQtyCart} = require('../middleware/productQtyCheck')
 
 router.get("/", userControllers.getHomepage);
 
@@ -26,7 +27,7 @@ router.get("/signup", userControllers.getSignup);
 router.post("/signup", userControllers.postSignup);
 
 // change product quantity
-router.put('/change-product-quantity',cartController.updateQuantity)
+router.put('/change-product-quantity',checkProductQtyCart,cartController.updateQuantity)
 
 // get shop page
 router.get('/shop',userControllers.getShop)
@@ -38,7 +39,7 @@ router.get('/product-detail',userControllers.getProductDetail)
 router.get('/cart-list',auth.userAuth,cartController.getCart)
 
 // add to cart
-router.get('/add-to-cart/:id',cartController.addToCart)
+router.post('/add-to-cart/:id',checkProductQty,cartController.addToCart)
 
 // delete product in cart
 router.delete('/delete-product-cart',auth.userAuth,cartController.deleteProduct)

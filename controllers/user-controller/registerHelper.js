@@ -11,12 +11,13 @@ module.exports = {
   // render homepage
   getHomepage: async (req, res) => {
     let bannerData = await userHelper.getBannerData()
+    let newlyAdded = await dbs.Product.find().sort({ CreatedAt: -1 });
     if (req.session) {
       user = req.session.user;
-      res.render("user/home", { user,bannerData });
+      res.render("user/home", { user,bannerData ,newlyAdded});
     } else {
     
-      res.render("user/home", {  bannerData });
+      res.render("user/home", {  bannerData,newlyAdded });
     }
   },
   // render loginpage

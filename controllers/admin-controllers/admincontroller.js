@@ -496,7 +496,7 @@ postSalesReport: (req, res) => {
       orderData.forEach((orders) => {
           details.push(orders.orders)
       })
-
+console.log(details,'details');
       res.render("admin/salesReport", { layout: 'admin-layout', admin, details, getDate })
   })
 

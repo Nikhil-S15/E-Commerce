@@ -279,7 +279,7 @@ input[type=number]:focus,
 }
 
 .text-brand {
-  color: #088178 !important;
+  color: #0b0b0b !important;
 }
 
 .text-primary {
@@ -967,7 +967,7 @@ button.submit:hover, button[type='submit']:hover {
 
 .btn.btn-brush, .button.btn-brush {
   background-color: transparent;
-  color: #088178;
+  color: #070707;
   border: 0;
   padding: 14px 80px 14px 65px;
   background-repeat: no-repeat;
@@ -3122,8 +3122,8 @@ table .product-thumbnail img {
 
 .deal .btn {
   background: none;
-  border: 2px solid #088178;
-  color: #088178;
+  border: 2px solid #111212;
+  color: #100f0f;
   border-radius: 4px;
   font-size: 14px;
   padding: 10px 24px;
@@ -5227,7 +5227,7 @@ h6.post-title {
 }
 
 .header-info > ul > li a {
-  color: #1a1a1a;
+  color: rgb(250, 249, 249);
   font-weight: 500;
 }
 
@@ -6446,8 +6446,8 @@ h6.post-title {
 
 .header-style-1 .header-top-ptb-1 {
   padding: 13px 0;
-  border-bottom: 3px solid #39b4ac;
-  background-color: #d8f4e2;
+  border-bottom: 5px solid gray;
+  background-color:black;
   background-image: none;
 }
 
@@ -7571,7 +7571,7 @@ span.fi-rs-apps {
 }
 
 .newsletter {
-  background-color: #aeccc5;
+  background-color: #f2f5f2;
 }
 
 .newsletter .icon-email {

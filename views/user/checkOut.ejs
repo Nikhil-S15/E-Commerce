@@ -11,11 +11,15 @@
     <div class="container">
 
       <!-- coupon dropdown div start -->
-      <div class="col-lg-4 ">
+      <div class="col-lg-4">
         <div class="toggle_info mb-30">
-          <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Have a coupon?</span> <a href="#coupon" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to enter your code</a></span>
+          <span>
+            <i class="fi-rs-label mr-10"></i>
+            <span class="text-muted">Have a coupon?</span>
+            <a href="#coupon" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to enter your code</a>
+          </span>
         </div>
-        <div class="panel-collapse collapse coupon_form " id="coupon">
+        <div class="panel-collapse collapse coupon_form" id="coupon">
           <div class="panel-body mb-20">
             <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
             <div>
@@ -23,13 +27,25 @@
                 <input type="text" name="coupon" id="couponCode" placeholder="Enter Coupon Code...">
               </div>
               <div>
-                <button class="btn  btn-md" name="login" onclick="applyCoupon('<%=total%>')">Apply Coupon</button>
+                <button class="btn btn-md" name="login" onclick="applyCoupon('<%=total%>')">Apply Coupon</button>
               </div>
             </div>
+            <div>
+              <tbody>
+             <h5>coupon list:</h5>
+             <% coupon.forEach(function(coupon) { %>
+<tr>
+  <li onclick="addcoupon('<%=coupon.couponCode%>')"><%=coupon.couponCode%></li>
+</tr>
+
+              <% }); %>
+            </tbody>
+            </div>
           </div>
+          <span id="couponErr"></span>
         </div>
-        <span id="couponErr"></span>
       </div>
+      
       <!-- coupon dropdown div end -->
 
       <div class="row">
@@ -638,6 +654,12 @@
 
       }
     })
+  }
+
+  function addcoupon(couponName)
+  {
+    let input = document.getElementById('couponCode')
+    input.value = couponName
   }
 
 

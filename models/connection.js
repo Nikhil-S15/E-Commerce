@@ -29,7 +29,7 @@ createdAt: {
 },
 status: {
     type: Boolean,
-    default: true
+    default: false
 }
 });
 

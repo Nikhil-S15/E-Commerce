@@ -103,11 +103,7 @@ router.get('/view_orders',adminController.getAllOrders)
 
 
 // get sales report
-router.get('/sales-report',adminController.getSalesReport)
-
-
-router.post('/sales-report', adminController.postSalesReport)
-
+router.route('/sales-report').get(adminController.getSalesReport).post(adminController.postSalesReport)
 
 /* GET Add Coupon Page. */
 router.route('/add-coupon').get(auth.adminAuth,couponController.getAddCoupon).post(couponController.postaddCoupon)

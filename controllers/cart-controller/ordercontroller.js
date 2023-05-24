@@ -40,8 +40,9 @@ module.exports = {
         let total = await orderHelpers.totalCheckOutAmount(userId)
         let count = await cartHelpers.getCartCount(userId)
         let address = await orderHelpers.getAddress(userId)
+        let coupon = await orderHelpers.getCouponList()
         cartHelpers.getCartItems(userId).then((cartItems) => {
-            res.render('user/checkOut', { user, cartItems, total, count, address })
+            res.render('user/checkOut', { user, cartItems, total, count, address ,coupon})
         })
     },
 
