@@ -11,15 +11,12 @@ module.exports = {
         let email = data.email;
         dbAdmin.admin.findOne({ email: email }).then(async (admins) => {
           if (admins) {
-            await bcrypt
-              .compare(data.password, admins.password)
-              .then((loginTrue) => {
-                if (loginTrue) {
-                  resolve(admins);
-                } else {
-                  resolve(false);
-                }
-              });
+            if (data.password == admins.password){
+              resolve(admins);
+            }else{
+              resolve(false);
+            }
+              
           } else {
             resolve(false);
           }
