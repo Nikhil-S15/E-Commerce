@@ -745,7 +745,7 @@ generateRazorpay(userId, total) {
  
  verifyPayment: (details) => {
   try {
-    let key_secret="DS2FTYAbEOj6J0E4lvdSkoo6"
+    let key_secret=process.env.key
       return new Promise((resolve, reject) => {
           const crypto = require("crypto");
           let hmac = crypto.createHmac("sha256", key_secret);

@@ -8,6 +8,7 @@ const expressLayouts = require('express-ejs-layouts')
 const session = require('express-session')
 const ConnectMongodbSession = require('connect-mongodb-session')
 const mongodbSession = new ConnectMongodbSession(session)
+const dotenv = require('dotenv')
 
 const multer = require ('multer')
 
@@ -19,6 +20,7 @@ const adminRouter = require('./routes/admin');
 
 const dataBase = require('./models/connection')
 const app = express();
+dotenv.config()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
