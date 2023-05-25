@@ -14,7 +14,7 @@ const couponController = require("../controllers/admin-controllers/couponcontrol
 router.get("/dashboard", auth.adminAuth,adminController.getDashboard);
 
 // get login page
-router.get("/",auth.adminAuth, adminController.getLogin);
+router.get("/", adminController.getLogin);
 
 // post login page
 router.post("/", adminController.postLogin);

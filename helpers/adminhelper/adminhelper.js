@@ -11,9 +11,14 @@ module.exports = {
         let email = data.email;
         dbAdmin.admin.findOne({ email: email }).then(async (admins) => {
           if (admins) {
+            console.log(admins,'admin find');
+            
             if (data.password == admins.password){
+            console.log(admins,'admin');
+
               resolve(admins);
             }else{
+              console.log('no ADMINN');
               resolve(false);
             }
               

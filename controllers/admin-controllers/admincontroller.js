@@ -116,10 +116,13 @@ module.exports = {
   postLogin: (req, res) => {
     let data = req.body;
     adminHelper.doLogin(data).then((loginAction) => {
+      console.log(loginAction);
       if (loginAction) {
         req.session.admin = loginAction;
+        console.log('ifff');
         res.redirect("/admin/dashboard");
       } else {
+        console.log('elseee');
         res.redirect("/admin");
       }
     });
