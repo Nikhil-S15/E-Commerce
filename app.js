@@ -9,7 +9,7 @@ const session = require('express-session')
 const ConnectMongodbSession = require('connect-mongodb-session')
 const mongodbSession = new ConnectMongodbSession(session)
 const dotenv = require('dotenv')
-
+const connectDB = require('./models/atlasConnection')
 const multer = require ('multer')
 
 
@@ -53,6 +53,18 @@ app.use(express.static(path.join(__dirname, "public/admin-assets")));
 
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
+
+
+
+const start = function () {
+  try {
+    connectDB(process.env.MONGO_URL)
+  }
+  catch (err) {
+    console.log(err);
+  }
+}
+start() 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) { 
