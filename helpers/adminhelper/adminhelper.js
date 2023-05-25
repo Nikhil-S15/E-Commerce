@@ -6,10 +6,10 @@ const { response } = require("express");
 
 module.exports = {
   doLogin: (data) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
         let email = data.email;
-        let user = dbAdmin.admin.find()
+        let user = await dbAdmin.admin.find()
         console.log(user);
         dbAdmin.admin.findOne({ email: email }).then(async (admins) => {
           console.log(admins,'matchinf emailllllll');
