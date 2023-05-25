@@ -9,7 +9,8 @@ module.exports = {
     return new Promise((resolve, reject) => {
       try {
         let email = data.email;
-        dbAdmin.admin.findOne({ email: email }).then(async (admins) => {
+        dbAdmin.admin.findOne({ email: data.email }).then(async (admins) => {
+          console.log(admins,'matchinf emailllllll');
           if (admins) {
             console.log(admins,'admin find');
             
