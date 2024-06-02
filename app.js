@@ -67,7 +67,7 @@ app.use('/admin', adminRouter);
 
 const start = function () {
   try {
-    connectDB(process.env.DB_URL)
+    connectDB(process.env.MONGO_URL)
   }
   catch (err) {
     console.log(err);
