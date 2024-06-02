@@ -1,92 +1,82 @@
-const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
-
+const createError = require('http-errors');
 const logger = require('morgan');
-const expressLayouts = require('express-ejs-layouts')
-const session = require('express-session')
-const ConnectMongodbSession = require('connect-mongodb-session')
-const mongodbSession = new ConnectMongodbSession(session)
-const dotenv = require('dotenv')
-const connectDB = require('./models/atlasConnection')
-const multer = require ('multer')
-const cors = require ('cors')
-
+const expressLayouts = require('express-ejs-layouts');
+const session = require('express-session');
+const ConnectMongoDBSession = require('connect-mongodb-session')(session);
+const dotenv = require('dotenv');
+const cors = require('cors');
 
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
+const connectDB = require('./models/atlasConnection'); // Adjust import based on your file structure
 
+dotenv.config();
 
-
-const dataBase = require('./models/connection');
-const { methods } = require('http');
 const app = express();
-dotenv.config()
 
-// view engine setup
+// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(expressLayouts)
+app.use(expressLayouts);
 
+// Middleware setup
 app.use(logger('dev'));
 app.use(express.json());
-
-// session
-app.use(session({
-  saveUninitialized: false,
-  secret: 'sessionSecret',
-  resave: false,
-  store: new mongodbSession({
-    uri: "mongodb://localhost:27017/E-Commerce",
-    collection: "session"
-  }),
-  cookie: {
-    maxAge: 1000 * 60 * 24 * 10,//10 days
-  },
-}))
-
-app.use(cors(
-  {
-    origin:('https://webdevelopment-3.onrender.com'),
-    methods:["POST" , "GET"],
-    Credential:true
-  }
-));
-
-
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, "public/admin-assets")));
+app.use(express.static(path.join(__dirname, 'public', 'admin-assets')));
 
+// Session setup
+const sessionStore = new ConnectMongoDBSession({
+  uri: process.env.MONGO_URL || 'mongodb://localhost:27017/E-Commerce',
+  collection: 'sessions'
+});
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'sessionSecret',
+  resave: false,
+  saveUninitialized: false,
+  store: sessionStore,
+  cookie: {
+    maxAge: 1000 * 60 * 24 * 10 // 10 days
+  }
+}));
+
+// CORS setup
+// app.use(cors({
+//   origin: 'https://webdevelopment-3.onrender.com',
+//   methods: ['POST', 'GET'],
+//   credentials: true
+// }));
+
+// Routes setup
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
 
+// MongoDB connection setup
+connectDB(process.env.MONGO_URL)
+  .then(() => {
+    console.log('MongoDB connected');
+  })
+  .catch(err => {
+    console.error('Error connecting to MongoDB:', err);
+    process.exit(1);
+  });
 
-
-const start = function () {
-  try {
-    connectDB(process.env.MONGO_URL)
-  }
-  catch (err) {
-    console.log(err);
-  }
-}
-start() 
-
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use(function(req, res, next) { 
   next(createError(404));
 });
 
-// error handler
+// Error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development  
+  // Set locals, only providing error in development  
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  // Render the error page
   res.status(err.status || 500);
   res.render('error');
 });
