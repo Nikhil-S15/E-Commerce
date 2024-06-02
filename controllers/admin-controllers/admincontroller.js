@@ -109,7 +109,7 @@ module.exports = {
   // get login admin
   getLogin: (req, res) => {
     req.session.admin = null;
-    res.render("admin/login", { layout: "admin-layout" });
+    res.render("admin/login", { layout: "loginLayout" });
   },
 
   // post login admin

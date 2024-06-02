@@ -16,7 +16,7 @@ cartHelpers.addToCart(req.params.id,req.session.user._id).then((response)=>
 // get cart page
 getCart:async (req,res)=>
 {
-    
+    console.log("hi i am nikhil");
 let userId = req.session.user._id
 let user = req.session.user
 let count = await cartHelpers.getCartCount(user._id)
@@ -24,10 +24,10 @@ let total = await orderHelpers.totalCheckOutAmount(userId)
 let subTotal = await orderHelpers.getSubTotal(userId)
 cartHelpers.getCartItems(userId).then((cartItems)=>
 {
-console.log(user , cartItems,count , total,subTotal);
+console.log(user , cartItems,count , total,subTotal,"jikku mone super da");
 
    console.log(user);
-    res.render('user/cart',{user , cartItems,count , total,subTotal})
+    res.render('user/cart1',{user , cartItems,count , total,subTotal})
 })
 },
 
