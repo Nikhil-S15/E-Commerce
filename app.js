@@ -11,6 +11,7 @@ const mongodbSession = new ConnectMongodbSession(session)
 const dotenv = require('dotenv')
 const connectDB = require('./models/atlasConnection')
 const multer = require ('multer')
+const cors = require ('cors')
 
 
 const userRouter = require('./routes/user');
@@ -18,7 +19,8 @@ const adminRouter = require('./routes/admin');
 
 
 
-const dataBase = require('./models/connection')
+const dataBase = require('./models/connection');
+const { METHODS } = require('http');
 const app = express();
 dotenv.config()
 
@@ -44,6 +46,13 @@ app.use(session({
   },
 }))
 
+app.use(cors(
+  {
+    origin:('https://web-development-plum.vercel.app'),
+    methods:["POST" , "GET"],
+    Credential:true
+  }
+));
 
 
 app.use(express.urlencoded({ extended: false }));
