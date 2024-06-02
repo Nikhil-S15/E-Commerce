@@ -20,7 +20,7 @@ const adminRouter = require('./routes/admin');
 
 
 const dataBase = require('./models/connection');
-const { METHODS } = require('http');
+const { methods } = require('http');
 const app = express();
 dotenv.config()
 
@@ -48,7 +48,7 @@ app.use(session({
 
 app.use(cors(
   {
-    origin:('https://web-development-plum.vercel.app'),
+    origin:('https://webdevelopment-3.onrender.com'),
     methods:["POST" , "GET"],
     Credential:true
   }
@@ -67,7 +67,7 @@ app.use('/admin', adminRouter);
 
 const start = function () {
   try {
-    connectDB(process.env.MONGO_URL)
+    connectDB(process.env.DB_URL)
   }
   catch (err) {
     console.log(err);
